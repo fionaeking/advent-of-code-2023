@@ -2,8 +2,6 @@
 
 public class Day1(string[] input) : IDay
 {
-    private readonly string[] _input = input;
-
     private readonly Dictionary<string, int> _numWords = new()
     {
         { "one", 1 },
@@ -19,25 +17,13 @@ public class Day1(string[] input) : IDay
 
     public void Part1()
     {
-        var total = 0;
-        foreach (var line in _input)
-        {
-            var firstDigit = line.First(char.IsDigit);
-            var lastDigit = line.Last(char.IsDigit);
-            total += int.Parse($"{firstDigit}{lastDigit}");
-        }
-        Console.WriteLine($"Part one total: {total}");
+        var totalPartOne = input.Select(line => int.Parse($"{line.First(char.IsDigit)}{line.Last(char.IsDigit)}")).Sum();
+        Console.WriteLine($"Part one total: {totalPartOne}");
     }
 
     public void Part2()
     {
-        var totalPartTwo = 0;
-        foreach (var line in input)
-        {
-            var firstDigit = GetDigit(line, true);
-            var lastDigit = GetDigit(line, false);
-            totalPartTwo += int.Parse($"{firstDigit}{lastDigit}");
-        }
+        var totalPartTwo = input.Select(line => int.Parse($"{GetDigit(line, true)}{GetDigit(line, false)}")).Sum();
         Console.WriteLine($"Part two total: {totalPartTwo}");
     }
 
