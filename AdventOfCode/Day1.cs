@@ -41,39 +41,32 @@ public class Day1(string[] input) : IDay
         Console.WriteLine($"Part two total: {totalPartTwo}");
     }
 
-    private int GetDigit(string line, bool first)
+    private int GetDigit(string line, bool workForwards)
     {
-        var skip = first ? 0 : line.Length - 1;
-        while (first ? (skip <= line.Length - 1) : (skip >= 0))
+        var startIndex = workForwards ? 0 : line.Length - 1;
+        while (workForwards ? (startIndex <= line.Length - 1) : (startIndex >= 0))
         {
-            var firstDigit = line.Skip(skip).First();
+            var firstDigit = line.Skip(startIndex).First();
             if (char.IsDigit(firstDigit))
             {
                 return int.Parse(firstDigit.ToString());
             }
 
-            var wordThree = CheckIfNumberWord(line, skip, 3);
-            if (wordThree is not null)
+            var firstNonNull = CheckIfNumberWords(line, startIndex).FirstOrDefault(x => x is not null);
+            if (firstNonNull is not null)
             {
-                return (int)wordThree;
+                return (int)firstNonNull;
             }
 
-            var wordFour = CheckIfNumberWord(line, skip, 4);
-            if (wordFour is not null)
-            {
-                return (int)wordFour;
-            }
-
-            var wordFive = CheckIfNumberWord(line, skip, 5);
-            if (wordFive is not null)
-            {
-                return (int)wordFive;
-            }
-
-            skip += first ? 1 : -1;
+            startIndex += workForwards ? 1 : -1;
             continue;
         }
         throw new Exception("No digit found");
+    }
+
+    private List<int?> CheckIfNumberWords(string line, int startIndex)
+    {
+        return [CheckIfNumberWord(line, startIndex, 3), CheckIfNumberWord(line, startIndex, 4), CheckIfNumberWord(line, startIndex, 5)];
     }
 
     private int? CheckIfNumberWord(string line, int startIndex, int length)
