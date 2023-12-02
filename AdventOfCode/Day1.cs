@@ -52,6 +52,7 @@ public class Day1(string[] input) : IDay
 
     private List<int?> CheckIfNumberWords(string line, int startIndex)
     {
+        // Check for lengths of 3, 4 and 5 in case we are at the start or end of a line
         return [CheckIfNumberWord(line, startIndex, 3), CheckIfNumberWord(line, startIndex, 4), CheckIfNumberWord(line, startIndex, 5)];
     }
 
