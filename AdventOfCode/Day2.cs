@@ -14,16 +14,11 @@ namespace AdventOfCode
             var gameGreenMax = 13;
             var gameBlueMax = 14;
 
-            var gameIdSuccessSum = 0;
-
-            for (var game = 0; game < input.Length; game++)
-            {
-                if (GetMaxMatch(input[game], _redRegex) <= gameRedMax && GetMaxMatch(input[game], _greenRegex) <= gameGreenMax && GetMaxMatch(input[game], _blueRegex) <= gameBlueMax)
-                {
-                    // Game ID actually starts at 1, not 0
-                    gameIdSuccessSum += (game + 1);
-                }
-            }
+            var gameIdSuccessSum = input.Select(
+                (line, index) => (GetMaxMatch(line, _redRegex) <= gameRedMax && GetMaxMatch(line, _greenRegex) <= gameGreenMax && GetMaxMatch(line, _blueRegex) <= gameBlueMax)
+                // Game ID actually starts at 1, not 0 
+                ? (index + 1) : 0)
+                .Sum();
             Console.WriteLine(gameIdSuccessSum);
         }
 
