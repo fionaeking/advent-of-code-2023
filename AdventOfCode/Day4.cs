@@ -35,6 +35,7 @@
         private static (int, int) Parse(string line)
         {
             var splitLine = line.Split(" | ");
+            // cardNum only required for part 2
             var cardNum = int.Parse(splitLine[0].Split(": ")[0].Replace("Card ", ""));
             var winningNums = splitLine[0].Split(": ")[1].Trim().Split(" ").Where(x => !string.IsNullOrEmpty(x)).Select(int.Parse).ToList();
             var myNums = splitLine[1].Trim().Split(" ").Where(x => !string.IsNullOrEmpty(x)).Select(int.Parse).ToList();
