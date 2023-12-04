@@ -4,7 +4,7 @@
     {
         public void Part1()
         {
-            var partOne = input.Select(x => Parse(x)).Where(x => x.Item2 > 0).Select(x => Math.Pow(2, x.Item2 - 1)).Sum();
+            var partOne = input.Select(Parse).Where(x => x.Item2 > 0).Select(x => Math.Pow(2, x.Item2 - 1)).Sum();
             Console.WriteLine(partOne);
         }
 
