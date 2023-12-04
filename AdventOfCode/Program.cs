@@ -5,9 +5,9 @@
         private static void Main()
         {
             var input = File.ReadAllLines("PuzzleInput.txt");
-            var day = new Day3(input);
+            var day = new Day4(input);
             day.Part1();
-            day.Part2();
+            //sday.Part2();
         }
     }
 }
