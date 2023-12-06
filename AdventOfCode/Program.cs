@@ -4,7 +4,7 @@ internal class Program
 {
     private static void Main()
     {
-        var day = new Day5("PuzzleInput.txt");
+        var day = new Day6("PuzzleInput.txt");
         day.Part1();
         day.Part2();
     }
