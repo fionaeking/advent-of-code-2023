@@ -2,18 +2,17 @@
 
 public class Day4(string inputFilename) : IDay
 {
+    private readonly IEnumerable<(int, int)> _input = File.ReadAllLines(inputFilename).Select(Parse);
     public void Part1()
     {
-        var input = File.ReadAllLines(inputFilename);
-        var partOne = input.Select(Parse).Where(x => x.Item2 > 0).Select(x => Math.Pow(2, x.Item2 - 1)).Sum();
+        var partOne = _input.Where(x => x.Item2 > 0).Select(x => Math.Pow(2, x.Item2 - 1)).Sum();
         Console.WriteLine(partOne);
     }
 
     public void Part2()
     {
-        var input = File.ReadAllLines(inputFilename);
         var scratchcardCount = 0;
-        var parsedInput = input.Select(x => Parse(x)).ToDictionary();
+        var parsedInput = _input.ToDictionary();
 
         var cardNumsQueue = new Queue<int>(parsedInput.Keys);
 
@@ -24,7 +23,7 @@ public class Day4(string inputFilename) : IDay
             var matchCount = parsedInput[currCard];
             if (matchCount != 0)
             {
-                for (int i = 1; i <= matchCount; i++)
+                for (var i = 1; i <= matchCount; i++)
                 {
                     cardNumsQueue.Enqueue(currCard + i);
                 }

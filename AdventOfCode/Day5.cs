@@ -66,7 +66,7 @@ public class Day5 : IDay
             }
             else
             {
-                for (int i = 0; i <= seedRange; i += tolerance)
+                for (var i = 0; i <= seedRange; i += tolerance)
                 {
                     seeds.Add(startSeed + i);
                 }

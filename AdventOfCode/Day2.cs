@@ -7,14 +7,15 @@ public class Day2(string inputFilename) : IDay
     private readonly Regex _greenRegex = new(@"(?<num>\d+) green");
     private readonly Regex _blueRegex = new(@"(?<num>\d+) blue");
 
+    private readonly string[] _input = File.ReadAllLines(inputFilename);
+
     public void Part1()
     {
-        var input = File.ReadAllLines(inputFilename);
         var gameRedMax = 12;
         var gameGreenMax = 13;
         var gameBlueMax = 14;
 
-        var gameIdSuccessSum = input.Select(
+        var gameIdSuccessSum = _input.Select(
             (line, index) => (GetMaxMatch(line, _redRegex) <= gameRedMax && GetMaxMatch(line, _greenRegex) <= gameGreenMax && GetMaxMatch(line, _blueRegex) <= gameBlueMax)
             // Game ID actually starts at 1, not 0 
             ? (index + 1) : 0)
@@ -24,8 +25,7 @@ public class Day2(string inputFilename) : IDay
 
     public void Part2()
     {
-        var input = File.ReadAllLines(inputFilename);
-        var totalPower = input.Select(line => GetMaxMatch(line, _redRegex) * GetMaxMatch(line, _greenRegex) * GetMaxMatch(line, _blueRegex)).Sum();
+        var totalPower = _input.Select(line => GetMaxMatch(line, _redRegex) * GetMaxMatch(line, _greenRegex) * GetMaxMatch(line, _blueRegex)).Sum();
         Console.WriteLine(totalPower);
     }
 
