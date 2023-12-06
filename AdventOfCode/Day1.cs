@@ -1,6 +1,6 @@
 ﻿namespace AdventOfCode;
 
-public class Day1(string[] input) : IDay
+public class Day1(string inputFilename) : IDay
 {
     private readonly Dictionary<string, int> _numWords = new()
     {
@@ -17,12 +17,14 @@ public class Day1(string[] input) : IDay
 
     public void Part1()
     {
+        var input = File.ReadAllLines(inputFilename);
         var totalPartOne = input.Select(line => int.Parse($"{line.First(char.IsDigit)}{line.Last(char.IsDigit)}")).Sum();
         Console.WriteLine($"Part one total: {totalPartOne}");
     }
 
     public void Part2()
     {
+        var input = File.ReadAllLines(inputFilename);
         var totalPartTwo = input.Select(line => int.Parse($"{GetDigit(line, true)}{GetDigit(line, false)}")).Sum();
         Console.WriteLine($"Part two total: {totalPartTwo}");
     }
@@ -47,7 +49,7 @@ public class Day1(string[] input) : IDay
             startIndex += workForwards ? 1 : -1;
             continue;
         }
-        throw new Exception("No digit found");
+        throw new IndexOutOfRangeException("No digit found");
     }
 
     private List<int?> CheckIfNumberWords(string line, int startIndex)

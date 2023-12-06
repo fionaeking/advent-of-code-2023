@@ -1,13 +1,11 @@
-﻿namespace AdventOfCode
+﻿namespace AdventOfCode;
+
+internal class Program
 {
-    internal class Program
+    private static void Main()
     {
-        private static void Main()
-        {
-            var input = File.ReadAllLines("PuzzleInput.txt");
-            var day = new Day4(input);
-            day.Part1();
-            day.Part2();
-        }
+        var day = new Day5("PuzzleInput.txt");
+        day.Part1();
+        day.Part2();
     }
 }

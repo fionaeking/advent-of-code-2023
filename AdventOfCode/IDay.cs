@@ -1,8 +1,7 @@
-﻿namespace AdventOfCode
+﻿namespace AdventOfCode;
+
+public interface IDay
 {
-    public interface IDay
-    {
-        public void Part1();
-        public void Part2();
-    }
+    public void Part1();
+    public void Part2();
 }
