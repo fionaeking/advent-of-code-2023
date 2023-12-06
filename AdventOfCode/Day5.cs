@@ -2,44 +2,24 @@
 
 public class Day5 : IDay
 {
-    private readonly IEnumerable<long> _seeds;
+    private readonly HashSet<long> _seeds;
     private readonly IEnumerable<IEnumerable<MapObject>> _mapObjects;
+    private readonly int _startingTolerance = 100000;
     public Day5(string inputFilename)
     {
         var input = File.ReadAllText(inputFilename).Split(Environment.NewLine + Environment.NewLine).Select(x => x.Split(Environment.NewLine)).ToList();
-        _seeds = input.First()[0].Replace("seeds: ", "").Split(" ").Select(long.Parse);
+        _seeds = input.First()[0].Replace("seeds: ", "").Split(" ").Select(long.Parse).ToHashSet();
         _mapObjects = input.Skip(1).Select(x => x.Skip(1)).Select(x => x.Select(y => new MapObject(y)));
     }
 
     public void Part1()
     {
-        var source = _seeds;
-        foreach (var m in _mapObjects)
-        {
-            var newSource = new List<long>();
-            foreach (var s in source)
-            {
-                var match = m.FirstOrDefault(n => s <= n.MaxSource && s >= n.MinSource);
-                if (match == null)
-                {
-                    newSource.Add(s);
-                }
-                else
-                {
-                    var diff = s - match.MinSource;
-                    var newValue = match.MinDestination + diff;
-                    newSource.Add(newValue);
-                }
-
-            }
-            source = newSource;
-        }
-        Console.WriteLine(source.Min());
+        Console.WriteLine(GetMin(_seeds, _mapObjects).Value);
     }
 
     public void Part2()
     {
-        var currTolerance = 100000;
+        var currTolerance = _startingTolerance;
         long? previousTolerance = null;
 
         long? currSeed = null;
@@ -57,7 +37,7 @@ public class Day5 : IDay
         Console.WriteLine(minLocation);
     }
 
-    private static Dictionary<long, long> GetSeeds(int tolerance, IEnumerable<long> seedsInput, long? prevNum, long? previousTolerance)
+    private static HashSet<long> GetSeeds(int tolerance, IEnumerable<long> seedsInput, long? prevNum, long? previousTolerance)
     {
         var seedsQueue = new Queue<long>(seedsInput);
 
@@ -92,17 +72,18 @@ public class Day5 : IDay
                 }
             }
         }
-        var source = new Dictionary<long, long>();
 
+        return seeds;
+    }
+
+    private static KeyValuePair<long, long> GetMin(HashSet<long> seeds, IEnumerable<IEnumerable<MapObject>> input)
+    {
+        var source = new Dictionary<long, long>();
         foreach (var s in seeds)
         {
             source.Add(s, s);
         }
-        return source;
-    }
 
-    private static KeyValuePair<long, long> GetMin(Dictionary<long, long> source, IEnumerable<IEnumerable<MapObject>> input)
-    {
         foreach (var m in input)
         {
             var newSource = new Dictionary<long, long>();

@@ -28,6 +28,7 @@ public class Day6(string inputFilename) : IDay
     private static int GetNumWins(long raceTime, long winDistance)
     {
         var numWins = 0;
+        // No point excuting while loop for holdTime = 0 and holdTime = raceTime as won't move anywhere!
         var holdTime = 1;
         while (holdTime < raceTime)
         {
