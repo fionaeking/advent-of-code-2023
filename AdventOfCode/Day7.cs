@@ -1,5 +1,4 @@
-﻿
-namespace AdventOfCode;
+﻿namespace AdventOfCode;
 
 public class Day7(string inputFilename) : IDay
 {
@@ -7,30 +6,14 @@ public class Day7(string inputFilename) : IDay
 
     public void Part1()
     {
-        var parsedInput = ParseInput();
-
-        var sum = 0;
-        var rank = 1;
-        foreach (var item in parsedInput)
-        {
-            sum += item.Item2 * rank;
-            rank++;
-        }
-        Console.WriteLine(sum);
+        var partOneAnswer = ParseInput().Select((item, rank) => item.Item2 * (rank + 1)).Sum();
+        Console.WriteLine(partOneAnswer);
     }
 
     public void Part2()
     {
-        var parsedInput = ParseInput(true);
-
-        var sum = 0;
-        var rank = 1;
-        foreach (var item in parsedInput)
-        {
-            sum += item.Item2 * rank;
-            rank++;
-        }
-        Console.WriteLine(sum);
+        var partTwoAnswer = ParseInput(true).Select((item, rank) => item.Item2 * (rank + 1)).Sum();
+        Console.WriteLine(partTwoAnswer);
     }
 
     private IOrderedEnumerable<(char[], int)> ParseInput(bool isJackWildcard = false)
@@ -57,20 +40,11 @@ public class Day7(string inputFilename) : IDay
 
     private static int GetPokerType(char[] item1, bool isJackWildcard = false)
     {
-        // if all 5 chars are the same, return 6
-        // if 4 chars are the same, return 5
-        // if 3 chars are the same and the other 2 are the same, return 4
-        // if 3 chars are the same and the other 2 are different, return 3
-        // if there are 2 pairs of chars, return 2
-        // if there is 1 pair of chars, return 1
-        // if there are no pairs, return 0
-
         var grouped = item1.GroupBy(x => x).Select((p) => new { Grp = p.Key, Cnt = p.Count() });
 
         var maxGroup = grouped.OrderByDescending(x => x.Cnt).First();
 
         var numJacks = item1.Where(x => x == 'J').Count();
-
         int maxCount;
         if (isJackWildcard && numJacks > 0 && numJacks < 5)
         {
