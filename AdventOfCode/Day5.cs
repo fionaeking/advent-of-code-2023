@@ -32,7 +32,7 @@ public class Day5 : IDay
             currSeed = min.Key;
             minLocation = min.Value;
             previousTolerance = currTolerance;
-            currTolerance /= 2;
+            currTolerance /= 4;
         }
         Console.WriteLine(minLocation);
     }
