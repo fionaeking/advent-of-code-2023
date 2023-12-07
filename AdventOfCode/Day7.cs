@@ -6,17 +6,15 @@ public class Day7(string inputFilename) : IDay
 
     public void Part1()
     {
-        var partOneAnswer = ParseInput().Select((item, rank) => item.Item2 * (rank + 1)).Sum();
-        Console.WriteLine(partOneAnswer);
+        Console.WriteLine(GetTotalWinnings());
     }
 
     public void Part2()
     {
-        var partTwoAnswer = ParseInput(true).Select((item, rank) => item.Item2 * (rank + 1)).Sum();
-        Console.WriteLine(partTwoAnswer);
+        Console.WriteLine(GetTotalWinnings(true));
     }
 
-    private IOrderedEnumerable<(char[], int)> ParseInput(bool isJackWildcard = false)
+    private int GetTotalWinnings(bool isJackWildcard = false)
     {
         return _input.Select(x => x.Split(" "))
             .Select(x => (x[0].ToCharArray(), int.Parse(x[1])))
@@ -25,7 +23,8 @@ public class Day7(string inputFilename) : IDay
             .ThenBy(x => ConvertToInt(x.Item1[1], isJackWildcard))
             .ThenBy(x => ConvertToInt(x.Item1[2], isJackWildcard))
             .ThenBy(x => ConvertToInt(x.Item1[3], isJackWildcard))
-            .ThenBy(x => ConvertToInt(x.Item1[4], isJackWildcard));
+            .ThenBy(x => ConvertToInt(x.Item1[4], isJackWildcard))
+            .Select((item, rank) => item.Item2 * (rank + 1)).Sum();
     }
 
     private static int ConvertToInt(char v, bool isJackWildcard = false)
