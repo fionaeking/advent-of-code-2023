@@ -40,7 +40,6 @@ public class Day4(string inputFilename) : IDay
         var cardNum = int.Parse(splitLine[0].Split(": ")[0].Replace("Card ", ""));
         var winningNums = splitLine[0].Split(": ")[1].Trim().Split(" ").Where(x => !string.IsNullOrEmpty(x)).Select(int.Parse).ToList();
         var myNums = splitLine[1].Trim().Split(" ").Where(x => !string.IsNullOrEmpty(x)).Select(int.Parse).ToList();
-        var matchCount = myNums.Where(winningNums.Contains).Count();
-        return (cardNum, matchCount);
+        return (cardNum, myNums.Where(winningNums.Contains).Count());
     }
 }
