@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode;
+﻿namespace AdventOfCode.Days6to10;
 
 public class Day7(string inputFilename) : IDay
 {
@@ -58,8 +58,8 @@ public class Day7(string inputFilename) : IDay
 
         if (maxCount == 5) return 6;
         else if (maxCount == 4) return 5;
-        else if (maxCount == 3) return (grouped.Any(x => x.Cnt == 2 && x.Grp != maxGroup.Grp)) ? 4 : 3;
-        else if (maxCount == 2) return (grouped.Where(x => x.Cnt == 2).Count() == 2) ? 2 : 1;
+        else if (maxCount == 3) return grouped.Any(x => x.Cnt == 2 && x.Grp != maxGroup.Grp) ? 4 : 3;
+        else if (maxCount == 2) return grouped.Where(x => x.Cnt == 2).Count() == 2 ? 2 : 1;
         return 0;
     }
 }

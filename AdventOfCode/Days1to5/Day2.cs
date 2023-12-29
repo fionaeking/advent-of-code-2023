@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace AdventOfCode;
+namespace AdventOfCode.Days1to5;
 public class Day2(string inputFilename) : IDay
 {
     private readonly Regex _redRegex = new(@"(?<num>\d+) red");
@@ -16,9 +16,9 @@ public class Day2(string inputFilename) : IDay
         var gameBlueMax = 14;
 
         var gameIdSuccessSum = _input.Select(
-            (line, index) => (GetMaxMatch(line, _redRegex) <= gameRedMax && GetMaxMatch(line, _greenRegex) <= gameGreenMax && GetMaxMatch(line, _blueRegex) <= gameBlueMax)
+            (line, index) => GetMaxMatch(line, _redRegex) <= gameRedMax && GetMaxMatch(line, _greenRegex) <= gameGreenMax && GetMaxMatch(line, _blueRegex) <= gameBlueMax
             // Game ID actually starts at 1, not 0 
-            ? (index + 1) : 0)
+            ? index + 1 : 0)
             .Sum();
         Console.WriteLine(gameIdSuccessSum);
     }

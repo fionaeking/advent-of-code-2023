@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode;
+﻿namespace AdventOfCode.Days6to10;
 
 public class Day8(string inputFilename) : IDay
 {

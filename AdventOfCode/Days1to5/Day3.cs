@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode;
+﻿namespace AdventOfCode.Days1to5;
 
 public class Day3(string _inputFilename) : IDay
 {
@@ -25,10 +25,10 @@ public class Day3(string _inputFilename) : IDay
                 var currNum = int.Parse(string.Join("", nextNumChars));
                 var currNumLength = nextNumChars.Count();
 
-                var down = (currY + 1 < _input.Length) && _input[currY + 1].Skip(currX - 1).Take(currX == 0 || currX == _input[0].Length - 1 ? currNumLength + 1 : currNumLength + 2).Any(x => x != _dotChar);
-                var up = (currY - 1 >= 0) && _input[currY - 1].Skip(currX - 1).Take(currX == 0 || currX == _input[0].Length - 1 ? currNumLength + 1 : currNumLength + 2).Any(x => x != _dotChar);
-                var left = (currX - 1 >= 0) && currLine.Skip(currX - 1).First() != _dotChar;
-                var right = (currX + currNumLength < currLine.Length) && currLine.Skip(currX + currNumLength).First() != _dotChar;
+                var down = currY + 1 < _input.Length && _input[currY + 1].Skip(currX - 1).Take(currX == 0 || currX == _input[0].Length - 1 ? currNumLength + 1 : currNumLength + 2).Any(x => x != _dotChar);
+                var up = currY - 1 >= 0 && _input[currY - 1].Skip(currX - 1).Take(currX == 0 || currX == _input[0].Length - 1 ? currNumLength + 1 : currNumLength + 2).Any(x => x != _dotChar);
+                var left = currX - 1 >= 0 && currLine.Skip(currX - 1).First() != _dotChar;
+                var right = currX + currNumLength < currLine.Length && currLine.Skip(currX + currNumLength).First() != _dotChar;
 
                 if (down || up || left || right)
                 {
@@ -66,7 +66,7 @@ public class Day3(string _inputFilename) : IDay
                 if (currY + 1 < _input.Length)
                 {
                     var startIndex = currX > 0 ? currX - 1 : currX;
-                    var maxIndex = (startIndex + currNumLength + 1 == _input[currY + 1].Length) ? startIndex + currNumLength : startIndex + currNumLength + 1;
+                    var maxIndex = startIndex + currNumLength + 1 == _input[currY + 1].Length ? startIndex + currNumLength : startIndex + currNumLength + 1;
 
                     for (var i = startIndex; i <= maxIndex; i++)
                     {
@@ -78,7 +78,7 @@ public class Day3(string _inputFilename) : IDay
                 if (currY - 1 >= 0)
                 {
                     var startIndex = currX > 0 ? currX - 1 : currX;
-                    var maxIndex = (startIndex + currNumLength + 1 == _input[currY - 1].Length) ? startIndex + currNumLength : startIndex + currNumLength + 1;
+                    var maxIndex = startIndex + currNumLength + 1 == _input[currY - 1].Length ? startIndex + currNumLength : startIndex + currNumLength + 1;
 
                     for (var i = startIndex; i <= maxIndex; i++)
                     {

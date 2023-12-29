@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode;
+﻿namespace AdventOfCode.Days1to5;
 
 public class Day1(string inputFilename) : IDay
 {
@@ -32,7 +32,7 @@ public class Day1(string inputFilename) : IDay
     private int GetDigit(string line, bool workForwards)
     {
         var startIndex = workForwards ? 0 : line.Length - 1;
-        while (workForwards ? (startIndex <= line.Length - 1) : (startIndex >= 0))
+        while (workForwards ? startIndex <= line.Length - 1 : startIndex >= 0)
         {
             var firstDigit = line.Skip(startIndex).First();
             if (char.IsDigit(firstDigit))
@@ -61,11 +61,11 @@ public class Day1(string inputFilename) : IDay
     private int? CheckIfNumberWord(string line, int startIndex, int length)
     {
         var substring = GetSubstring(line, startIndex, length);
-        return (substring is not null && _numWords.TryGetValue(substring, out int value)) ? value : null;
+        return substring is not null && _numWords.TryGetValue(substring, out int value) ? value : null;
     }
 
     private static string? GetSubstring(string line, int startIndex, int length)
     {
-        return (startIndex <= (line.Length - length)) ? line.Substring(startIndex, length) : null;
+        return startIndex <= line.Length - length ? line.Substring(startIndex, length) : null;
     }
 }
