@@ -4,68 +4,53 @@ namespace AdventOfCode.Days16to20;
 
 internal class Day18(string inputFilename) : IDay
 {
-    private readonly IEnumerable<DigPlan> _input = File.ReadAllLines(inputFilename).Select(x => x.Split(" ")).Select(x => new DigPlan()
-    {
-        Direction = char.Parse(x[0]),
-        Metres = int.Parse(x[1])
-    });
+    private readonly IEnumerable<string[]> _input = File.ReadAllLines(inputFilename).Select(x => x.Split(" "));
 
     public void Part1()
     {
-        var visitedPoints = new List<Point>() { new() { X = 0, Y = 0 } };
-        foreach (var digPlan in _input)
+        var input = _input.Select(x => new DigPlan()
         {
+            Direction = char.Parse(x[0]),
+            Metres = int.Parse(x[1])
+        });
+
+        var count = GetCubicMetresOfLava(input);
+        Console.WriteLine(count);
+    }
+
+    private long GetCubicMetresOfLava(IEnumerable<DigPlan> input)
+    {
+        var visitedPoints = new List<Point>() { new() { X = 0, Y = 0 } };
+        foreach (var digPlan in input)
+        {
+            var lastX = visitedPoints.Last().X;
+            var lastY = visitedPoints.Last().Y;
             switch (digPlan.Direction)
             {
                 case 'R':
-                    for (var i = 1; i <= digPlan.Metres; i++)
-                    {
-                        visitedPoints.Add(new() { X = visitedPoints.Last().X + 1, Y = visitedPoints.Last().Y });
-                    }
+                    visitedPoints.AddRange(Enumerable.Range(1, digPlan.Metres).Select(i => new Point() { X = lastX + i, Y = lastY }));
                     break;
                 case 'U':
-                    for (var i = 1; i <= digPlan.Metres; i++)
-                    {
-                        visitedPoints.Add(new() { X = visitedPoints.Last().X, Y = visitedPoints.Last().Y - 1 });
-                    }
+                    visitedPoints.AddRange(Enumerable.Range(1, digPlan.Metres).Select(i => new Point() { X = lastX, Y = lastY - i }));
                     break;
                 case 'L':
-                    for (var i = 1; i <= digPlan.Metres; i++)
-                    {
-                        visitedPoints.Add(new() { X = visitedPoints.Last().X - 1, Y = visitedPoints.Last().Y });
-                    }
+                    visitedPoints.AddRange(Enumerable.Range(1, digPlan.Metres).Select(i => new Point() { X = lastX - i, Y = lastY }));
                     break;
                 case 'D':
-                    for (var i = 1; i <= digPlan.Metres; i++)
-                    {
-                        visitedPoints.Add(new() { X = visitedPoints.Last().X, Y = visitedPoints.Last().Y + 1 });
-                    }
+                    visitedPoints.AddRange(Enumerable.Range(1, digPlan.Metres).Select(i => new Point() { X = lastX, Y = lastY + i }));
                     break;
                 default:
                     throw new NotImplementedException($"Unexpected direction {digPlan.Direction}");
             }
         }
 
-        var count = 0;
-
         var minX = visitedPoints.Min(p => p.X);
         var maxX = visitedPoints.Max(p => p.X);
         var minY = visitedPoints.Min(p => p.Y);
         var maxY = visitedPoints.Max(p => p.Y);
 
-        for (var y = minY; y <= maxY; y++)
-        {
-            for (var x = minX; x <= maxX; x++)
-            {
-                if (IsPointOnOrInPolygon(new Point() { X = x, Y = y }, [.. visitedPoints], maxX, minX, maxY, minY))
-                {
-                    count++;
-                }
-            }
-        }
-        Console.WriteLine(count);
+        return Enumerable.Range(minY, maxY - minY + 1).AsParallel().Select(y => Enumerable.Range(minX, maxX - minX + 1).AsParallel().Where(x => true == IsPointOnOrInPolygon(new Point() { X = x, Y = y }, [.. visitedPoints], maxX, minX, maxY, minY)).Count()).Sum();
     }
-
 
     public static bool IsPointOnOrInPolygon(Point point, Point[] polygon, int maxX, int minX, int maxY, int minY)
     {
@@ -79,6 +64,7 @@ internal class Day18(string inputFilename) : IDay
         }
 
         var inPolygon = false;
+
         for (var i = 0; i < polygon.Length; i++)
         {
             var j = (i + 1) % polygon.Length;
