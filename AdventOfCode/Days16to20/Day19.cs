@@ -4,6 +4,7 @@ namespace AdventOfCode.Days16to20;
 
 public class Day19(string inputFilename) : IDay
 {
+    private readonly Regex _workflowConditionsRegex = new(@"(?<category>[xmas])(?<operator>.)(?<val>\d+):(?<nextName>[a-zA-Z]+)");
     private readonly string[][] _input = File.ReadAllText(inputFilename).Split($"{Environment.NewLine}{Environment.NewLine}").Select(x => x.Split(Environment.NewLine)).ToArray();
 
     public void Part1()
@@ -23,21 +24,19 @@ public class Day19(string inputFilename) : IDay
             })
         });
 
-        var sum = 0;
-        foreach (var part in parts)
-        {
-            var currName = "in";
-            while (currName != "A" && currName != "R")
-            {
-                var currWorkflow = workflows.First(w => w.Name == currName);
-                currName = GetNextName(part, currWorkflow);
-            }
-            if (currName == "A")
-            {
-                sum += part.Parts.Select(p => p.Value).Sum();
-            }
-        }
+        var sum = parts.Select(p => GetSumIfAccepted(p, workflows)).Sum();
         Console.WriteLine(sum);
+    }
+
+    private int GetSumIfAccepted(PartRatings part, IEnumerable<Workflow> workflows)
+    {
+        var currName = "in";
+        while (currName != "A" && currName != "R")
+        {
+            var currWorkflow = workflows.First(w => w.Name == currName);
+            currName = GetNextName(part, currWorkflow);
+        }
+        return (currName == "A") ? part.Parts.Select(p => p.Value).Sum() : 0;
     }
 
     private static string GetNextName(PartRatings part, Workflow currWorkflow)
@@ -63,17 +62,16 @@ public class Day19(string inputFilename) : IDay
         return input.Replace("}", "").Replace("{", "");
     }
 
-    private static List<WorkflowCondition> GetMatches(string line)
+    private List<WorkflowCondition> GetMatches(string line)
     {
-        var regex = new Regex(@"(?<category>[xmas])(?<operator>.)(?<val>\d+):(?<nextName>[a-zA-Z]+)");
-        var matches = regex.Matches(line);
-        return matches.Select(x => new WorkflowCondition()
-        {
-            Category = (Category)(x.Groups["category"].Value[0]),
-            GreaterThan = x.Groups["operator"].Value == ">",
-            Value = int.Parse(x.Groups["val"].Value),
-            NextName = x.Groups["nextName"].Value
-        }
+        return _workflowConditionsRegex
+            .Matches(line).Select(x => new WorkflowCondition()
+            {
+                Category = (Category)(x.Groups["category"].Value[0]),
+                GreaterThan = x.Groups["operator"].Value == ">",
+                Value = int.Parse(x.Groups["val"].Value),
+                NextName = x.Groups["nextName"].Value
+            }
         ).ToList();
     }
 
