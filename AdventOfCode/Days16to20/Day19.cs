@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace AdventOfCode.Days16to20;
 
@@ -77,7 +78,42 @@ public class Day19(string inputFilename) : IDay
 
     public void Part2()
     {
-        throw new NotImplementedException();
+        var workflows = _input[0].Select(workflow => new Workflow()
+        {
+            Name = workflow.Split('{')[0],
+            Conditions = GetMatches(workflow),
+            Default = RemoveCurlyBrackets(workflow.Split('{')[1]).Split(",").Last()
+        });
+
+        var range = Enumerable.Range(1, 4000);
+        var allXs = range.Select(x => new Part()
+        {
+            Category = Category.x,
+            Value = x
+        });
+        var allMs = range.Select(x => new Part()
+        {
+            Category = Category.m,
+            Value = x
+        });
+        var allAs = range.Select(x => new Part()
+        {
+            Category = Category.a,
+            Value = x
+        });
+        var allSs = range.Select(x => new Part()
+        {
+            Category = Category.s,
+            Value = x
+        });
+
+        var parts = allXs.SelectMany(x => allMs.SelectMany(m => allAs.SelectMany(a => allSs.Select(s => new PartRatings() { Parts = new List<Part>() { x, m, a, s } }))));
+
+        var sums = parts.Chunk(167409079).Select(c => c.).Select(p => GetSumIfAccepted(p, workflows)).Sum();
+
+        long sum = parts.Select(p => GetSumIfAccepted(p, workflows)).Sum();
+        Console.WriteLine(sum);
+
     }
 }
 

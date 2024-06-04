@@ -79,8 +79,23 @@ internal class Day18(string inputFilename) : IDay
 
     public void Part2()
     {
-        throw new NotImplementedException();
+        var input = _input.Select(x => x[2].Replace("(#", "").Replace(")", "").ToCharArray()).Select(x => new DigPlan()
+        {
+            Direction = _intToDirMap[x.Last()],
+            Metres = Convert.ToInt32(string.Join("", x.Take(5)), 16)
+        });
+
+        var count = GetCubicMetresOfLava(input);
+        Console.WriteLine(count);
     }
+
+    private readonly Dictionary<char, char> _intToDirMap = new()
+    {
+        {'0', 'R' },
+        {'1', 'D' },
+        {'2', 'L' },
+        {'3', 'U' }
+    };
 }
 
 public class DigPlan
